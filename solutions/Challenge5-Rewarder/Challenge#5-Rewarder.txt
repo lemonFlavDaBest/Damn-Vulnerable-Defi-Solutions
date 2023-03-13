@@ -1,6 +1,14 @@
-# Challenge #5 - The Rewarder
+# Challenge #5 - The Rewarder CTF
 
 ## The Challenge
 
+The goal of this CTF is to be able to claims most of the Pool's reward tokens when they are next distributed(every 5 days). Reward
+tokens are distributed based on many DV tokens you have staked in the pool. And the kicker, you start with 0 DV tokens. 
 
+## The Exploit
 
+The Rewarder Pool is vulnerable due to *time*. The Rewarder Pool can distribute rewards (in certain circumstances) immediately upon 
+deposit. Anyone can see why this is a potential issue. Malicious actors might just stake their coins for 1 second, gain full rewards, and 
+the procede to unstake immediately. Then 5 days later, do the same. 
+
+What makes this exploit even more dangerous is having access to flashloans of DV tokens. 
