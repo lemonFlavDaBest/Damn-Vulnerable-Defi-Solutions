@@ -5,10 +5,32 @@
 The goal of this CTF is to be able to claims most of the Pool's reward tokens when they are next distributed(every 5 days). Reward
 tokens are distributed based on many DV tokens you have staked in the pool. And the kicker, you start with 0 DV tokens. 
 
-## The Exploit
+## The Contract Issue
 
 The Rewarder Pool is vulnerable due to *time*. The Rewarder Pool can distribute rewards (in certain circumstances) immediately upon 
 deposit. Anyone can see why this is a potential issue. Malicious actors might just stake their coins for 1 second, gain full rewards, and 
 the procede to unstake immediately. Then 5 days later, do the same. 
 
 What makes this exploit even more dangerous is having access to flashloans of DV tokens. 
+
+## The Exploit
+
+1. We deploy a RewardExploiter Contract that will call the RewarderPool contract and the FlashLoanPool contract. 
+
+2. We start with this function
+```
+function initFlashLoan() external {
+        require(rewarderPool.isNewRewardsRound(), 'need new round');
+        require(msg.sender == owner, 'only owner can call');
+        flashPool.flashLoan(liquidityToken.balanceOf(address(flashPool)));
+    }
+```
+The first require statement makes sure it is a new rewards round. why? because if it is true, then the RewarderPool will distribute 
+rewards *exactly when* we deposit. this is good for us. Next require statement is just an owner check. The final line of our function 
+calls the flashLoan fucntion from the flashPool contract and borrows all of the DV tokens it has. 
+
+3. Next, when we call flashPool.flashLoan(liquidityToken.balanceOf(address(flashPool))); it calls a function named 'receiveFlashLoan(uint256 amount)'
+from the sender (us).
+
+4. We create the 'receiveFlashLoan(uint256 amount)' so that we can do stuff with the DV tokens from the flashloan.
+
