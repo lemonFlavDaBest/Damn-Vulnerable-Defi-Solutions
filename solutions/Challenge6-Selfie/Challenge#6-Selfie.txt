@@ -1,0 +1,8 @@
+# The Challenge
+The goal of this challenge is to drain the funds of the dao utilizing their
+own governance mechanisms. Additionally in this challenge there exists 
+an flashloan pool that gives you access to the governance tokens
+
+# The Exploit
+Idea: I think the first vector of attack is just to flashloan the funds
+to make a proposal, then flashloan the funds again to execute the proposal.
