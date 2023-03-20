@@ -1,8 +1,26 @@
-# The Challenge
+# Challenge #5 - Selfie
+
+## The Challenge
 The goal of this challenge is to drain the funds of the dao utilizing their
 own governance mechanisms. Additionally in this challenge there exists 
 an flashloan pool that gives you access to the governance tokens
 
-# The Exploit
-Idea: I think the first vector of attack is just to flashloan the funds
-to make a proposal, then flashloan the funds again to execute the proposal.
+## The contract issue
+We can borrow (via flashloan) enough tokens to pass whatever action we want
+through the goverance contract.
+
+## The Exploit
+1. We deploy a contract named SelfiePoolExploiter that inherits the IERC3156FlashBorrower
+contract because we want borrow from a flashloan contract that allows borrowing of the 
+governance token. 
+
+2. We create a function called **initFlashloan()** that initializes a flashloan from the Selfie
+borrowing pool. It calls the SelfiePool flashLoan function and borrows all of the pools token.
+
+```
+function initFlashLoan() external {
+        require(msg.sender == owner, 'owner initiates flashloans');
+        bool succ = selfie.flashLoan(this, address(DVtoken), DVtoken.balanceOf(address(selfie)), '0x');
+        require(succ, "Flashloan function failed");
+    }
+```   
