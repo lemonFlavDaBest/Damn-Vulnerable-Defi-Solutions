@@ -4,4 +4,6 @@
 An exchange is using 'trusted' oracles to price the sale of Non-Fungible tokens. The goal is
 take all of the ether from the exchange contract.
 
-## Brainstorming ideads
+## Brainstorming ideas 
+I think i need to push a couple of my own oracles. and use those to influence price. sell the nft
+and voila.
