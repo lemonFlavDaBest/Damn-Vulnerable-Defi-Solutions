@@ -1,0 +1,7 @@
+# Challenge #7 - Compromised
+
+## The Challenge
+An exchange is using 'trusted' oracles to price the sale of Non-Fungible tokens. The goal is
+take all of the ether from the exchange contract.
+
+## Brainstorming ideads
