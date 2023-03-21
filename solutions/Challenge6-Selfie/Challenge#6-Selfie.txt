@@ -24,3 +24,52 @@ function initFlashLoan() external {
         require(succ, "Flashloan function failed");
     }
 ```   
+3. The SelfiePool flashLoan function borrows the amount requested, and then executes onFlashLoan()
+function from the caller contract, which we define as:
+
+```
+function onFlashLoan(
+        address initiator,
+        address token,
+        uint256 amount,
+        uint256 fee,
+        bytes calldata data
+    ) external returns (bytes32) {;
+        DVtoken.snapshot();
+        executeProposal();
+        uint256 repayAmount = amount + fee;
+        DVtoken.approve(msg.sender, repayAmount);
+        return keccak256("ERC3156FlashBorrower.onFlashLoan");
+    }
+```
+
+The function's code is explained as follows. We first call the snapshot function from the token's 
+contract. The snapshot function is crucial because we need the governance contract to know that we 
+currently possess a large amount of the governance tokens. 
+
+The next line calls executeProposal():
+```
+    bytes memory data = abi.encodeWithSignature("emergencyExit(address)", owner);
+    actionID = governance.queueAction(address(selfie), 0, data);
+    return actionID;
+```
+
+This calls the goverance contract's queueAction() function -- which we allows us to take actions on 
+behalf of the governance contract. We ask the governance contract to call the emergencyExit(address)
+function from the SelfiePool contract and input our own address as the receiver of the emergenceyExit
+funds. 
+
+We approve DV tokens to be paid back to the FlashLoaner and the get transferred back as the funciton 
+finishes. 
+
+4. We wait two days because there is a delay between when you can queue an action and execute action. We 
+then call executeAction()
+```
+function executeAction() external {
+        require(actionID > 0, "actionID doesnt exist");
+        require(msg.sender == owner, 'owner can only call this function');
+        governance.executeAction(actionID);
+    }
+```
+
+this makes some checks and then calls the goverance contract to execute the emergenceyExit() function.
