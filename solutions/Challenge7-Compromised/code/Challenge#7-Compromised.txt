@@ -11,3 +11,7 @@ and voila.
 New idea:
 what i think, deploy 4 oracles setting the price at 0. that makes the median price zero. mint a few,
 deploy more oracles with higher price, then sell them off. 
+
+New idea:
+the contract for  trustful oracle renounces the role of trusted whatever, if it renounces to a zero address
+maybe i can set the price via the zero adress through the constructor of another contract
