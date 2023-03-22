@@ -7,3 +7,7 @@ take all of the ether from the exchange contract.
 ## Brainstorming ideas 
 I think i need to push a couple of my own oracles. and use those to influence price. sell the nft
 and voila.
+
+New idea:
+what i think, deploy 4 oracles setting the price at 0. that makes the median price zero. mint a few,
+deploy more oracles with higher price, then sell them off. 
